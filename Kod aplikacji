@@ -1,0 +1,984 @@
+### streamlit run dashboard.py --server.port=8502
+import requests
+import pandas as pd
+import geopandas as gpd
+import streamlit as st
+import matplotlib.pyplot as plt
+import os
+from streamlit_folium import st_folium
+import folium
+from folium import GeoJson, GeoJsonTooltip
+import branca.colormap as cm
+import numpy as np
+
+# Adres URL API
+base_url_ogolem = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/58559'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_ogolem}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_ogolem = pd.DataFrame(rows)
+
+
+# Adres URL API
+base_url_kryminalne = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/77215'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_kryminalne}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_kryminalne = pd.DataFrame(rows)
+
+
+# Adres URL API
+base_url_gospodarcze = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/77216'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_gospodarcze}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_gospodarcze = pd.DataFrame(rows)
+
+
+# Adres URL API
+base_url_drogowe = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/58561'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_drogowe}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_drogowe = pd.DataFrame(rows)
+
+
+# Adres URL API
+base_url_zycie_i_zdrowie = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/58562'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_zycie_i_zdrowie}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_zycie_i_zdrowie = pd.DataFrame(rows)
+
+
+# Adres URL API
+base_url_mienie = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/58564'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_mienie}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_mienie = pd.DataFrame(rows)
+
+# Adres URL API
+base_url_wolnosc = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/58563'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_wolnosc}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_wolnosc = pd.DataFrame(rows)
+
+# Adres URL API
+base_url_rodzina_i_opieka = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/58560'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_rodzina_i_opieka}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_rodzina_i_opieka = pd.DataFrame(rows)
+
+# Adres URL API
+base_url_bezp_powszechne = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/632882'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_bezp_powszechne}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_bezp_powszechne = pd.DataFrame(rows)
+
+# Adres URL API
+base_url_wskaznik_wykrywalnosci = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/58565'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_wskaznik_wykrywalnosci}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_wskaznik_wykrywalnosci = pd.DataFrame(rows)
+
+df_list=[df_ogolem,df_kryminalne,df_gospodarcze,df_drogowe,df_zycie_i_zdrowie,df_mienie,df_wolnosc,
+         df_rodzina_i_opieka,df_bezp_powszechne,df_wskaznik_wykrywalnosci]
+
+result = df_list[0][['id', 'name', 'year']].copy()
+for i, df in enumerate(df_list):
+    result[f'val_{i+1}'] = df['val']
+    
+result.rename(columns={'val_1': 'Przestępstwa ogółem',
+                  'val_2': 'Przestępstwa o charakterze kryminalnym',
+                  'val_3' : 'Przestępstwa o charakterze gospodarczym',
+                  'val_4' : 'Przestępstwa przeciwko bezpieczeństwu powszechnemu i bezpieczeństwu w komunikacji - drogowe',
+                  'val_5' : 'Przestępstwa przeciwko życiu i zdrowiu',
+                   'val_6' : 'Przestępstwa przeciwko mieniu',
+                   'val_7' : 'Przestępstwa przeciwko wolności, wolności sumienia, wolności seksualnej i obyczajności razem',
+                   'val_8' : 'Przestępstwa przeciwko rodzinie i opiece',
+                   'val_9' : 'Przestępstwa przeciwko bezpieczeństwu powszechnemu i bezpieczeństwu w komunikacji razem',
+                   'val_10' : 'Wskaźnik wykrywalności sprawców przestępstw stwierdzonych przez Policję - ogółem'
+                  }, inplace=True)
+
+result.to_csv('dane_koncowe.csv', index=False)
+
+
+
+
+# Adres URL API
+base_url_ogolem = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/72305'
+page_size = 100  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_ogolem}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+ll = pd.DataFrame(rows)
+
+ll.to_csv('liczba ludnosci.csv', index=False)
+
+# Załaduj dane
+file_path = "dane_koncowe.csv"  # Ścieżka do pliku z danymi
+wojewodztwa_geojson = "wojewodztwa.geojson"
+powiaty_geojson = "powiaty.geojson"
+powiaty_woj = "powiaty.csv"
+ll = "liczba ludnosci.csv"
+
+# Wczytanie danych
+df = pd.read_csv(file_path)
+wojewodztwa = gpd.read_file(wojewodztwa_geojson)
+powiaty = gpd.read_file(powiaty_geojson)
+powiaty_woj = pd.read_csv(powiaty_woj, sep=";")
+liczba_ludnosci = pd.read_csv(ll)
+
+
+# Zmień nazwę kolumny, jeśli trzeba, żeby była zgodna z 'name'
+wojewodztwa = wojewodztwa.rename(columns={"nazwa": "name"})
+powiaty = powiaty.rename(columns={"nazwa": "name"})
+
+
+# Łączenie powiatów z województwami
+powiaty_with_woj = gpd.sjoin(powiaty, wojewodztwa, how="left", predicate="intersects")
+
+# Tworzenie unikalnego klucza 
+powiaty_with_woj = powiaty_with_woj.rename(columns={"name_left": "name"})
+powiaty_with_woj = powiaty_with_woj.rename(columns={"name_right": "Województwo"})
+
+powiaty_with_woj['name'] = powiaty_with_woj['name'].str.lower()
+powiaty_with_woj['unique_key'] = powiaty_with_woj['name'] + "_" + powiaty_with_woj['Województwo']
+
+powiaty=powiaty_with_woj
+
+# Definicja wag dla wskaźnika złożonego
+wagi = {
+    "Przestępstwa ogółem": 0.2,
+    "Przestępstwa o charakterze kryminalnym": 0.25,
+    "Przestępstwa o charakterze gospodarczym": 0.15,
+    "Przestępstwa przeciwko bezpieczeństwu powszechnemu i bezpieczeństwu w komunikacji - drogowe": 0.1,
+    "Przestępstwa przeciwko życiu i zdrowiu": 0.1,
+    "Przestępstwa przeciwko mieniu": 0.15,
+    "Przestępstwa przeciwko wolności, wolności sumienia, wolności seksualnej i obyczajności razem": 0.05,
+    "Przestępstwa przeciwko rodzinie i opiece": 0.05,
+    "Przestępstwa przeciwko bezpieczeństwu powszechnemu i bezpieczeństwu w komunikacji razem": 0.1,
+}
+
+# Normalizacja wskaźników przestępstw dla każdej kolumny
+def normalizuj_kolumne(df, kolumna):
+    return (df[kolumna] - df[kolumna].min()) / (df[kolumna].max() - df[kolumna].min())
+
+# Lista województw
+nazwa_wojewodztwa = [
+    "DOLNOŚLĄSKIE", "KUJAWSKO-POMORSKIE", "LUBELSKIE", "LUBUSKIE",
+    "ŁÓDZKIE", "MAŁOPOLSKIE", "MAZOWIECKIE", "OPOLSKIE",
+    "PODKARPACKIE", "PODLASKIE", "POMORSKIE", "ŚLĄSKIE",
+    "ŚWIĘTOKRZYSKIE", "WARMIŃSKO-MAZURSKIE", "WIELKOPOLSKIE", "ZACHODNIOPOMORSKIE"
+]
+
+# Definicja zakresów id dla województw
+id_ranges = {
+    "DOLNOŚLĄSKIE": (30200000000, 30300000000),
+    "KUJAWSKO-POMORSKIE": (40400000000, 40500000000),
+    "LUBELSKIE": (60600000000, 61000000000),
+    "LUBUSKIE": (20800000000, 21000000000),
+    "ŁÓDZKIE": (51000000000, 52000000000),
+    "MAŁOPOLSKIE": (11200000000, 12000000000),
+    "MAZOWIECKIE": (71400000000, 72000000000),
+    "OPOLSKIE": (31600000000, 31700000000),
+    "PODKARPACKIE": (61800000000, 61900000000),
+    "PODLASKIE": (62000000000, 63000000000),
+    "POMORSKIE": (42200000000, 42300000000),
+    "ŚLĄSKIE": (12400000000, 19000000000),
+    "ŚWIĘTOKRZYSKIE": (52600000000, 53000000000),
+    "WARMIŃSKO-MAZURSKIE": (42800000000, 43000000000),
+    "WIELKOPOLSKIE": (23000000000, 23100000000),
+    "ZACHODNIOPOMORSKIE": (23200000000, 23300000000),
+}
+
+miasta_na_prawach_powiatow = [
+    "Biała Podlaska", "Białystok", "Bielsko-Biała", "Bydgoszcz", "Chełm", 
+    "Ciechanów", "Częstochowa", "Elbląg", "Gdańsk", "Gdynia", 
+    "Gliwice", "Gorzów Wielkopolski", "Grudziądz", "Jelenia Góra", "Kalisz", 
+    "Katowice", "Kielce", "Konin", "Koszalin", "Kraków", 
+    "Krosno", "Legnica", "Leszno", "Lublin", "Łomża", 
+    "Łódź", "Nowy Sącz", "Olsztyn", "Opole", "Ostrołęka", 
+    "Piła", "Piotrków Trybunalski", "Płock", "Poznań", "Przemyśl", 
+    "Ruda Śląska", "Rybnik", "Rzeszów", "Siedlce", "Sieradz", 
+    "Słupsk", "Sopot", "Sosnowiec", "Suwałki", "Szczecin", 
+    "Świnoujście", "Tarnobrzeg", "Tarnów", "Toruń", "Tychy", 
+    "Wałbrzych", "Warszawa", "Włocławek", "Wrocław", "Zabrze", 
+    "Zamość", "Zielona Góra", "Żory", "Świętochłowice", "Siemianowice Śląskie", 
+    "Radom", "Piekary Śląskie", "Jaworzno", "Chorzów", "Dąbrowa Górnicza", 
+    "Bytom", "Nowy Targ", "Gniezno"
+]
+
+
+# Podział na województwa i powiaty
+df_woj = df[df["name"].isin(nazwa_wojewodztwa)].copy()
+df_pow = df[df["name"].str.contains("Powiat", case=False)].copy()
+df_woj['name'] = df_woj['name'].str.lower()
+df_pow['name'] = df_pow['name'].str.lower()
+
+df_pow['name'] = df_pow['name'].str.replace('m\\. ', '', regex=True)
+df_pow['name'] = df_pow['name'].str.replace('powiat wałbrzych od 2013', 'powiat wałbrzych', regex=True)
+df_pow['name'] = df_pow['name'].str.replace('st\\. ', '', regex=True)
+
+df_woj2 = df_woj
+
+ll_woj = liczba_ludnosci[liczba_ludnosci["name"].isin(nazwa_wojewodztwa)].copy()
+ll_pow = liczba_ludnosci[liczba_ludnosci["name"].str.contains("Powiat", case=False)].copy()
+ll_pow2 = liczba_ludnosci[liczba_ludnosci["name"].isin(miasta_na_prawach_powiatow)].copy()
+
+ll_pow = pd.concat([ll_pow, ll_pow2], axis=0)
+
+ll_pow['name'] = ll_pow['name'].str.replace('m\\. ', '', regex=True)
+ll_pow['name'] = ll_pow['name'].str.replace('powiat wałbrzych od 2013', 'powiat wałbrzych', regex=True)
+ll_pow['name'] = ll_pow['name'].str.replace('st\\. ', '', regex=True)
+
+df_pow['unique_key2'] = df_pow['name'] + "_" + df_pow['year'].astype(str)
+ll_pow['name'] = ll_pow['name'].str.lower()
+ll_pow['unique_key2'] = ll_pow['name'] + "_" + ll_pow['year'].astype(str)
+
+# Dodaj wskaźnik kompozytowy z powrotem do geometrii powiatów
+df_pow = df_pow.merge(
+    ll_pow[['unique_key2', 'val']],
+    on=['unique_key2'],
+    how='left'
+)
+
+df_woj['unique_key2'] = df_woj['name'] + "_" + df_woj['year'].astype(str)
+ll_woj['name'] = ll_woj['name'].str.lower()
+ll_woj['unique_key2'] = ll_woj['name'] + "_" + ll_woj['year'].astype(str)
+
+
+# Dodaj wskaźnik kompozytowy z powrotem do geometrii powiatów
+df_woj = df_woj.merge(
+    ll_woj[['unique_key2', 'val']],
+    on=['unique_key2'],
+    how='left'
+)
+
+df_pow.iloc[:, [3,4,5,6,7,8,9,10,11]] = df_pow.iloc[:, [3,4,5,6,7,8,9,10,11]].div(df_pow.iloc[:, 14], axis=0)
+df_woj.iloc[:, [3,4,5,6,7,8,9,10,11]] = df_woj.iloc[:, [3,4,5,6,7,8,9,10,11]].div(df_woj.iloc[:, 14], axis=0)
+
+# Tworzenie warunków i wartości
+conditions = [
+    (df_pow["id"] >= v[0]) & (df_pow["id"] <= v[1])
+    for k, v in id_ranges.items()
+]
+choices = list(id_ranges.keys())
+
+# Przypisanie województwa na podstawie warunków
+df_pow["Województwo"] = np.select(conditions, choices, default="Nieznane")
+
+df_pow2 = df_pow.copy()  # Tworzymy kopię danych
+
+# Przywracanie oryginalnych wartości
+columns_to_restore = [3, 4, 5, 6, 7, 8, 9, 10, 11]
+df_pow2.iloc[:, columns_to_restore] = df_pow.iloc[:, columns_to_restore].mul(df_pow.iloc[:, 14], axis=0)
+
+
+
+# Obliczanie wskaźnika kompozytowego dla województw
+df_woj_normalized = df_woj.copy()
+for kolumna in wagi.keys():
+    if kolumna in df_woj.columns:
+        df_woj_normalized[kolumna] = normalizuj_kolumne(df_woj, kolumna)
+
+df_woj_normalized["Wskaźnik kompozytowy"] = 0
+for kolumna, waga in wagi.items():
+    df_woj_normalized["Wskaźnik kompozytowy"] += df_woj_normalized[kolumna] * waga
+
+df_aggregated_woj = df_woj_normalized.groupby(["id", "name"])["Wskaźnik kompozytowy"].mean().reset_index()
+
+# Funkcja do normalizacji kolumn w obrębie grupy
+def normalizuj_grupowo(df, kolumna, grupa):
+    df[kolumna] = (df[kolumna] - df.groupby(grupa)[kolumna].transform('min')) / (
+        df.groupby(grupa)[kolumna].transform('max') - df.groupby(grupa)[kolumna].transform('min')
+    )
+    return df
+
+# Tworzenie unikalnego klucza w `powiaty_woj`
+powiaty_woj['unique_key'] = powiaty_woj['name'] + "_" + powiaty_woj['Województwo']
+
+# Tworzenie unikalnego klucza w `df_pow`
+df_pow['unique_key'] = df_pow['name'] + "_" + df_pow['Województwo']
+
+# Grupowanie i normalizacja powiatów w obrębie województw
+df_pow_normalized = df_pow.copy()
+for kolumna in wagi.keys():
+    if kolumna in df_pow_normalized.columns:
+        df_pow_normalized = normalizuj_grupowo(df_pow_normalized, kolumna, 'Województwo')
+
+# Obliczanie wskaźnika kompozytowego dla powiatów w obrębie województw
+df_pow_normalized["Wskaźnik kompozytowy"] = 0
+for kolumna, waga in wagi.items():
+    if kolumna in df_pow_normalized.columns:
+        df_pow_normalized["Wskaźnik kompozytowy"] += df_pow_normalized[kolumna] * waga
+
+# Agregacja wyników
+df_aggregated_pow = df_pow_normalized.groupby(["id", "name", "Województwo"])["Wskaźnik kompozytowy"].mean().reset_index()
+
+df_aggregated_pow['Województwo'] = df_aggregated_pow['Województwo'].str.lower()
+df_aggregated_pow['unique_key'] = df_aggregated_pow['name'] + "_" + df_aggregated_pow['Województwo']
+
+# Dodaj wskaźnik kompozytowy z powrotem do geometrii powiatów
+powiaty = powiaty.merge(
+    df_aggregated_pow[['unique_key', 'Wskaźnik kompozytowy']],
+    on=['unique_key'],
+    how='left'
+)
+powiaty = powiaty.dropna(subset=['Wskaźnik kompozytowy'])
+
+# Dodaj wskaźniki kompozytowe do województw
+wojewodztwa = wojewodztwa.merge(df_aggregated_woj[['name', 'Wskaźnik kompozytowy']], left_on='name', right_on='name', how='left')
+
+
+# Funkcja do tworzenia mapy województw
+def create_voivodeships_map():
+    m = folium.Map(location=[52.237049, 19.017532], zoom_start=6, tiles="cartodbpositron")
+    colormap = cm.LinearColormap(colors=["yellow", "orange", "red"], vmin=0.1, vmax=0.5)
+
+    def style_function(feature):
+        return {
+            'fillColor': colormap(feature["properties"].get("Wska\u017anik kompozytowy", 0) or 0),
+            'color': 'black',
+            'weight': 0.5,
+            'fillOpacity': 0.7,
+        }
+
+    def highlight_function(feature):
+        return {'weight': 3, 'color': 'blue'}
+
+    geojson = GeoJson(
+        wojewodztwa,
+        style_function=style_function,
+        tooltip=GeoJsonTooltip(
+            fields=["name", "Wska\u017anik kompozytowy"],
+            aliases=["Wojew\u00f3dztwo", "Wska\u017anik"],
+            localize=True,
+        ),
+        highlight_function=highlight_function,
+    )
+    geojson.add_to(m)
+    colormap.add_to(m)
+    return m
+
+# Funkcja do tworzenia mapy powiatów dla wybranego województwa
+def create_counties_map(selected_voivodeship):
+    # Znajdź centroid wybranego województwa
+    wojewodztwo = wojewodztwa[wojewodztwa["name"] == selected_voivodeship]
+    if not wojewodztwo.empty:
+        centroid = wojewodztwo.geometry.centroid.iloc[0]
+        location = [centroid.y, centroid.x]
+    else:
+        location = [52.237049, 19.017532]  # Domyślna lokalizacja w razie błędu
+
+    # Filtruj powiaty dla wybranego województwa
+    powiaty_filtered = powiaty[powiaty["Województwo"] == selected_voivodeship]
+
+    m = folium.Map(location=location, zoom_start=8, tiles="cartodbpositron")
+    colormap = cm.LinearColormap(colors=["yellow", "orange", "red"], vmin=0.1, vmax=0.5)
+
+    def style_function(feature):
+        return {
+            'fillColor': colormap(feature["properties"].get("Wska\u017anik kompozytowy", 0) or 0),
+            'color': 'black',
+            'weight': 0.5,
+            'fillOpacity': 0.7,
+        }
+
+    def highlight_function(feature):
+        return {'weight': 3, 'color': 'blue'}
+
+    geojson = GeoJson(
+        powiaty_filtered,
+        style_function=style_function,
+        tooltip=GeoJsonTooltip(
+            fields=["name", "Wska\u017anik kompozytowy"],
+            aliases=["Jednostka", "Wska\u017anik"],
+            localize=True,
+        ),
+        highlight_function=highlight_function,
+    )
+    geojson.add_to(m)
+    colormap.add_to(m)
+    return m
+
+# Funkcja do wyświetlenia mapy powiatów
+def display_county_map(selected_voivodeship):
+    if selected_voivodeship:
+        st.subheader(f"Wybrane województwo: {selected_voivodeship.capitalize()}")
+    else:
+        st.subheader("Wybrane województwo: brak danych")
+    
+    m = create_counties_map(selected_voivodeship)
+    st_folium(m, key="county_map")
+    
+
+def generate_ranking(data, title, wojewodztwo=None):
+    # Filtrowanie powiatów tylko z wybranego województwa
+    if wojewodztwo:
+        data = data[data["Województwo"] == wojewodztwo]
+        
+    # Tworzenie rankingu
+    ranking = data[['name', 'Wskaźnik kompozytowy']].sort_values(by='Wskaźnik kompozytowy', ascending=True).head(10)
+    st.sidebar.subheader(title)
+    for i, row in ranking.iterrows():
+        st.sidebar.write(f"{row['name'].capitalize()}: {row['Wskaźnik kompozytowy']:.2f}")
+
+
+df_woj2['year'] = df_woj2['year'].astype(str)
+df_pow2['year'] = df_pow2['year'].astype(str)
+
+def display_data_view(df_woj, df_pow):
+    import streamlit as st
+
+    st.title("Dane przestępstw w województwach i powiatach")
+
+    # Definiowanie listy przestępstw
+    crime_columns = [
+        'Przestępstwa ogółem',
+        'Przestępstwa o charakterze kryminalnym',
+        'Przestępstwa o charakterze gospodarczym',
+        'Przestępstwa przeciwko bezpieczeństwu powszechnemu i bezpieczeństwu w komunikacji - drogowe',
+        'Przestępstwa przeciwko życiu i zdrowiu',
+        'Przestępstwa przeciwko mieniu',
+        'Przestępstwa przeciwko wolności, wolności sumienia, wolności seksualnej i obyczajności razem',
+        'Przestępstwa przeciwko rodzinie i opiece',
+        'Przestępstwa przeciwko bezpieczeństwu powszechnemu i bezpieczeństwu w komunikacji razem'
+    ]
+
+    # Funkcja formatowania liczb
+    def format_numbers(x):
+        if pd.isna(x):  # Jeśli wartość jest NaN, zwróć pusty ciąg znaków
+            return ""
+        if isinstance(x, (int, float)):
+            return f"{int(round(x)):,}".replace(",", " ")  # Zamiana przecinków na spacje
+        return x
+
+    # Normalizacja nazw województw do małych liter w obu DataFrame'ach
+    df_woj2['name'] = df_woj2['name'].str.lower()
+    df_pow2['Województwo'] = df_pow2['Województwo'].str.lower()
+
+    # Filtry
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        # Filtr na lata
+        selected_years = st.multiselect(
+            "Wybierz rok",
+            df_woj2['year'].unique(),
+            default=df_woj['year'].unique()
+        )
+
+    with col2:
+        # Filtr na województwa
+        selected_voivodeships = st.multiselect(
+            "Wybierz województwo",
+            df_woj2['name'].unique(),
+            default=df_woj2['name'].unique()
+        )
+
+    with col3:
+        # Filtr na rodzaj przestępstwa
+        selected_crimes = st.multiselect(
+            "Wybierz rodzaj przestępstwa",
+            ["Wszystkie"] + crime_columns,
+            default=["Wszystkie"]
+        )
+
+    # Filtrowanie danych wojewódzkich
+    filtered_woj = df_woj2[
+        (df_woj2['year'].isin(selected_years)) &
+        (df_woj2['name'].isin(selected_voivodeships))
+    ]
+
+    # Filtrowanie danych powiatowych
+    filtered_pow = df_pow2[
+        (df_pow2['year'].isin(selected_years)) &
+        (df_pow2['Województwo'].isin(selected_voivodeships))
+    ]
+
+    # Jeśli wybrano konkretne przestępstwa, wybierz tylko te kolumny
+    if "Wszystkie" not in selected_crimes:
+        selected_columns = ['name', 'year'] + selected_crimes
+        filtered_woj = filtered_woj[selected_columns]
+        filtered_pow = filtered_pow[['name', 'Województwo', 'year'] + selected_crimes]
+    else:
+        # Dla "Wszystkie" pokaż wszystkie kolumny przestępstw
+        filtered_woj = filtered_woj[['name', 'year'] + crime_columns]
+        filtered_pow = filtered_pow[['name', 'Województwo', 'year'] + crime_columns]
+
+    # Formatowanie liczb w kolumnach przestępstw
+    filtered_woj[crime_columns] = filtered_woj[crime_columns].applymap(format_numbers)
+    filtered_pow[crime_columns] = filtered_pow[crime_columns].applymap(format_numbers)
+
+    # Wyświetlenie danych
+    for voivodeship in selected_voivodeships:
+        st.markdown(f"### Województwo: {voivodeship.capitalize()}")
+
+        # Dane dla województwa
+        woj_data = filtered_woj[filtered_woj['name'] == voivodeship]
+        st.dataframe(woj_data)
+
+        # Dane dla powiatów w województwie
+        pow_data = filtered_pow[filtered_pow['Województwo'] == voivodeship]
+        if not pow_data.empty:
+            with st.expander(f"Powiaty w województwie {voivodeship.capitalize()}"):
+                st.dataframe(pow_data)
+        else:
+            st.write(f"Brak danych dla powiatów w województwie: {voivodeship.capitalize()}")
+
+
+# Główna aplikacja
+st.sidebar.title("Nawigacja")
+selected_page = st.sidebar.radio("Przejdź do:", ["Mapa", "Dane"])
+
+if selected_page == "Mapa":
+    # Interfejs Streamlit
+    st.title("Mapa wska\u017anika przest\u0119pczo\u015bci*")
+    # Obsługa wyboru województwa za pomocą sesji
+    if "selected_voivodeship" not in st.session_state:
+        st.session_state["selected_voivodeship"] = None
+
+    if st.session_state["selected_voivodeship"] is None:
+        m = create_voivodeships_map()
+        selected_feature = st_folium(m, key='woj_map')
+        generate_ranking(wojewodztwa, "Ranking 10 najbezpieczniejszych województw:")    
+
+        # Obsługa kliknięcia na mapie województw
+        if selected_feature and selected_feature.get("last_active_drawing"):
+            properties = selected_feature["last_active_drawing"].get("properties", {})
+            selected_voivodeship = properties.get("name")
+
+            if selected_voivodeship:
+                st.session_state["selected_voivodeship"] = selected_voivodeship.lower()
+    else:
+        # Wyświetlenie mapy powiatów
+        st.subheader(f"Wybrane województwo: {st.session_state['selected_voivodeship'].capitalize()}")
+        m = create_counties_map(st.session_state["selected_voivodeship"])
+        st_folium(m, key="county_map")
+        generate_ranking(powiaty, "Ranking 10 najbezpieczniejszych powiatów:", wojewodztwo=st.session_state["selected_voivodeship"])
+        
+
+        # Przycisk cofania
+        if st.button("Powrót do mapy województw"):
+            st.session_state["selected_voivodeship"] = None
+    st.markdown("""
+    <div style="font-family: 'Times New Roman'; font-size: 16px; line-height: 1.5;">
+        <b>*Wskaźnik zawiera dane dotyczące:</b>
+        <ul>
+            <li>liczby przestępstw ogółem,</li>
+            <li>liczby przestępstw o charakterze kryminalnym,</li>
+            <li>liczby przestępstw o charakterze gospodarczym,</li>
+            <li>liczby przestępstw przeciwko bezpieczeństwu powszechnemu i bezpieczeństwu w komunikacji - drogowe,</li>
+            <li>liczby przestępstw przeciwko życiu i zdrowiu,</li>
+            <li>liczby przestępstw przeciwko mieniu,</li>
+            <li>liczby przestępstw przeciwko wolności, wolności sumienia, wolności seksualnej i obyczajności razem,</li>
+            <li>liczby przestępstw przeciwko rodzinie i opiece,</li>
+            <li>liczby przestępstw przeciwko bezpieczeństwu powszechnemu i bezpieczeństwu w komunikacji razem,</li>
+        </ul>
+        <p>podzielonych przez liczbę ludności w danym województwie/powiecie.</p>
+    </div>
+    """, unsafe_allow_html=True)
+        
+else:
+    display_data_view(df_woj2, df_pow2)
+
+
+st.markdown("""
+    <style>
+    .footer {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        font-size: 12px;
+        font-style: italic;
+        color: #666;
+        padding: 10px;
+    }
+    </style>
+    <div class="footer">
+        Data odświeżenia: 30.12.2024
+    </div>
+    """, unsafe_allow_html=True)
+
+
+
+
