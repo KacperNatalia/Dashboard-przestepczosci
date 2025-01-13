@@ -47,10 +47,6 @@ Wersja: 1.15.0 lub wyższa.
 Przeznaczenie: Wizualizacja danych i wykresy.
 Wersja: 3.6.0 lub wyższa.
 
-6)Shapely
-Przeznaczenie: Operacje na geometrii obiektów geoprzestrzennych.
-Wersja: 1.8.5 lub wyższa.
-
   6)Folium
 Przeznaczenie: Obsługa plików geoprzestrzennych w formacie GML, GeoJSON itp.
 Wersja: 1.9.0 lub wyższa.
@@ -109,5 +105,5 @@ Test interfejsu użytkownika:
 Wynik pozytywny. Kolory i wartości na mapach są zgodne z obliczonymi wskaźnikami. Przejście między województwami a powiatami działa poprawnie.
 
 Test wydajności aplikacji:
-Wynik pozytywny. Aplikacja działa płynnie przy obciążeniu danymi o rozmiarze do 100 tysięcy rekordów.
+Wynik pozytywny. Aplikacja działa, lecz przy obciążeniu danymi o rozmiarze powyżej 100 tysięcy rekordów następuje spowolnienie działania.
 
