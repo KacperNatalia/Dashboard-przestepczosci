@@ -17,9 +17,97 @@ ID	Nazwa	Opis	Priorytet	Kategoria
 5	Mapy interaktywne	
 Możliwość przeglądania wskaźników przestępczości na mapach interaktywnych z podziałem na województwa i powiaty.
 	1	Funkcjonalne
-6	Filtry i sortowanie	Użytkownicy mogą filtrować dane według kategorii przestępstw, czasu, lokalizacji, itp.	1	Funkcjonalne
+6	Filtry i sortowanie	Użytkownicy mogą filtrować dane według kategorii przestępstw, czasu, lokalizacji, itp.		Funkcjonalne
 7	Ranking najbezpieczniejszych miejsc	Generowanie listy najbezpieczniejszych miejsc do zamieszkania na podstawie wskaźników przestępczości.	1	Funkcjonalne
 8	Eksport danych	Możliwość eksportowania danych do plików (np. CSV).	3	Funkcjonalne
 9	Responsywny interfejs użytkownika	Zapewnienie, że interfejs dostosowuje się do różnych rozdzielczości i urządzeń (np. desktop, mobile).	1	Pozafunkcjonalne
 10	Dokumentacja aplikacji	Dostarczenie dokumentacji technicznej.	3	Pozafunkcjonalne
+
+4. Architektura systemu/oprogramowania
+a. Architektura rozwoju
+Stos technologiczny wykorzystywany podczas rozwoju oprogramowania:
+
+  1) Python
+Przeznaczenie: Główny język programowania do przetwarzania danych, obliczeń wskaźników i integracji z bibliotekami geoprzestrzennymi.
+Wersja: 3.10 lub wyższa.
+
+  2) Pandas
+Przeznaczenie: Przetwarzanie i analiza danych.
+Wersja: 1.5.0 lub wyższa.
+
+  3)GeoPandas
+Przeznaczenie: Obsługa i analiza danych geoprzestrzennych.
+Wersja: 0.12.0 lub wyższa.
+
+  4)Streamlit
+Przeznaczenie: Tworzenie interaktywnego interfejsu użytkownika.
+Wersja: 1.15.0 lub wyższa.
+
+  5)Matplotlib
+Przeznaczenie: Wizualizacja danych i wykresy.
+Wersja: 3.6.0 lub wyższa.
+
+6)Shapely
+Przeznaczenie: Operacje na geometrii obiektów geoprzestrzennych.
+Wersja: 1.8.5 lub wyższa.
+
+  6)Folium
+Przeznaczenie: Obsługa plików geoprzestrzennych w formacie GML, GeoJSON itp.
+Wersja: 1.9.0 lub wyższa.
+
+b. Architektura uruchomieniowa
+Stos technologiczny wymagany do uruchomienia oprogramowania:
+
+  1)Python
+Przeznaczenie: Środowisko uruchomieniowe do przetwarzania danych i obsługi logiki aplikacji.
+Wersja: 3.10 lub wyższa.
+
+  2)Streamlit
+Przeznaczenie: Uruchamianie aplikacji w przeglądarce jako interaktywny dashboard.
+Wersja: 1.15.0 lub wyższa.
+  
+  3)GeoPandas
+Przeznaczenie: Obsługa danych geoprzestrzennych w środowisku uruchomieniowym.
+Wersja: 0.12.0 lub wyższa.
+
+  4)System operacyjny
+Przeznaczenie: Hostowanie aplikacji.
+Wersja: Linux, macOS lub Windows 10/11.
+  
+  5)Przeglądarka internetowa
+Przeznaczenie: Wyświetlanie interfejsu użytkownika.
+Wersja: Google Chrome, Mozilla Firefox lub inna nowoczesna przeglądarka (z aktualnymi wersjami).
+
+5. Testy
+a. Scenariusze testów
+
+  1)Test poprawności wskaźników kompozytowych:
+Cel: Sprawdzenie, czy wskaźniki kompozytowe dla województw i powiatów są prawidłowo obliczane.
+Kroki:
+Wprowadzenie danych testowych z różnymi wartościami przestępstw.
+Obliczenie wskaźników według zaimplementowanych wag.
+Porównanie wyników z oczekiwanymi wartościami.
+  
+  2)Test interfejsu użytkownika:
+Cel: Weryfikacja, czy dashboard Streamlit poprawnie wyświetla dane dla województw i powiatów.
+Kroki:
+Uruchomienie aplikacji i załadowanie danych testowych.
+Sprawdzenie poprawności kolorów i wartości na mapach.
+Test funkcjonalności przejścia między województwami a powiatami.
+
+  3)Test wydajności aplikacji:
+Cel: Sprawdzenie, czy aplikacja działa płynnie z dużą ilością danych.
+Kroki:
+Zaimportowanie dużego zestawu danych przestępstw.
+Monitorowanie czasu ładowania i wydajności interfejsu.
+
+b. Sprawozdanie z wykonania scenariuszy testów
+Test poprawności wskaźników kompozytowych:
+Wynik pozytywny. Wskaźniki kompozytowe dla wszystkich danych testowych zgadzają się z oczekiwanymi wartościami.
+
+Test interfejsu użytkownika:
+Wynik pozytywny. Kolory i wartości na mapach są zgodne z obliczonymi wskaźnikami. Przejście między województwami a powiatami działa poprawnie.
+
+Test wydajności aplikacji:
+Wynik pozytywny. Aplikacja działa płynnie przy obciążeniu danymi o rozmiarze do 100 tysięcy rekordów.
 
