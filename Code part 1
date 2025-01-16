@@ -1,0 +1,486 @@
+import requests
+import pandas as pd
+import geopandas as gpd
+import streamlit as st
+import matplotlib.pyplot as plt
+import os
+
+# Adres URL API
+base_url_ogolem = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/58559'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_ogolem}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_ogolem = pd.DataFrame(rows)
+
+
+# Adres URL API
+base_url_kryminalne = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/77215'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_kryminalne}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_kryminalne = pd.DataFrame(rows)
+
+
+# Adres URL API
+base_url_gospodarcze = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/77216'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_gospodarcze}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_gospodarcze = pd.DataFrame(rows)
+
+
+# Adres URL API
+base_url_drogowe = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/58561'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_drogowe}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_drogowe = pd.DataFrame(rows)
+
+
+# Adres URL API
+base_url_zycie_i_zdrowie = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/58562'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_zycie_i_zdrowie}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_zycie_i_zdrowie = pd.DataFrame(rows)
+
+
+# Adres URL API
+base_url_mienie = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/58564'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_mienie}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_mienie = pd.DataFrame(rows)
+
+# Adres URL API
+base_url_wolnosc = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/58563'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_wolnosc}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_wolnosc = pd.DataFrame(rows)
+
+# Adres URL API
+base_url_rodzina_i_opieka = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/58560'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_rodzina_i_opieka}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_rodzina_i_opieka = pd.DataFrame(rows)
+
+# Adres URL API
+base_url_bezp_powszechne = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/632882'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_bezp_powszechne}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_bezp_powszechne = pd.DataFrame(rows)
+
+# Adres URL API
+base_url_wskaznik_wykrywalnosci = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/58565'
+page_size = 10  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_wskaznik_wykrywalnosci}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+df_wskaznik_wykrywalnosci = pd.DataFrame(rows)
+
+df_list=[df_ogolem,df_kryminalne,df_gospodarcze,df_drogowe,df_zycie_i_zdrowie,df_mienie,df_wolnosc,
+         df_rodzina_i_opieka,df_bezp_powszechne,df_wskaznik_wykrywalnosci]
+
+result = df_list[0][['id', 'name', 'year']].copy()
+for i, df in enumerate(df_list):
+    result[f'val_{i+1}'] = df['val']
+    
+result.rename(columns={'val_1': 'Przestępstwa ogółem',
+                  'val_2': 'Przestępstwa o charakterze kryminalnym',
+                  'val_3' : 'Przestępstwa o charakterze gospodarczym',
+                  'val_4' : 'Przestępstwa przeciwko bezpieczeństwu powszechnemu i bezpieczeństwu w komunikacji - drogowe',
+                  'val_5' : 'Przestępstwa przeciwko życiu i zdrowiu',
+                   'val_6' : 'Przestępstwa przeciwko mieniu',
+                   'val_7' : 'Przestępstwa przeciwko wolności, wolności sumienia, wolności seksualnej i obyczajności razem',
+                   'val_8' : 'Przestępstwa przeciwko rodzinie i opiece',
+                   'val_9' : 'Przestępstwa przeciwko bezpieczeństwu powszechnemu i bezpieczeństwu w komunikacji razem',
+                   'val_10' : 'Wskaźnik wykrywalności sprawców przestępstw stwierdzonych przez Policję - ogółem'
+                  }, inplace=True)
+
+result.to_csv('dane_koncowe.csv', index=False)
+
+
+
+
+# Adres URL API
+base_url_ogolem = 'https://bdl.stat.gov.pl/api/v1/data/by-variable/72305'
+page_size = 100  # Liczba rekordów na stronę (zgodna z API)
+# Funkcja do pobierania danych z jednej strony
+def fetch_page(page):
+    url = f"{base_url_ogolem}?page={page}&page-size={page_size}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Błąd podczas pobierania strony {page}: {response.status_code}")
+        return None
+        
+
+# Pobieranie wszystkich stron
+all_records = []
+page = 0
+while True:
+    data = fetch_page(page)
+    if not data or 'results' not in data or not data['results']:
+        break  # Kończymy, gdy nie ma więcej wyników
+    all_records.extend(data['results'])  # Dodajemy wyniki z tej strony
+    print(f"Pobrano stronę {page}")
+    page += 1
+    
+# Przetwarzanie danych w DataFrame
+rows = []
+for record in all_records:
+    id = record['id']
+    name = record['name']
+    for value in record['values']:
+        rows.append({
+            'id': id,
+            'name': name,
+            'year': value['year'],
+            'val': value['val'],
+            'attrId': value['attrId']
+        })
+
+ll = pd.DataFrame(rows)
