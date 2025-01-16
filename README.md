@@ -49,36 +49,41 @@ Projekt ma na celu stworzenie interaktywnego narzędzia analitycznego, które um
 |System operacyjny|Hostowanie aplikacji.|Linux, macOS lub Windows 10/11|
 |Przeglądarka internetowa|Wyświetlanie interfejsu użytkownika.|Google Chrome, Mozilla Firefox lub inna nowoczesna przeglądarka (z aktualnymi wersjami)|
 
-5. Testy
-a. Scenariusze testów
+## 5. Testy
+### a. Scenariusze testów
+#### 1) Test poprawności wskaźników kompozytowych:
+##### Cel: Sprawdzenie, czy wskaźniki kompozytowe dla województw i powiatów są prawidłowo obliczane.
+###### Kroki:
+<ul>
+<li>Wprowadzenie danych testowych z różnymi wartościami przestępstw.</li>
+<li>Obliczenie wskaźników według zaimplementowanych wag.</li>
+<li>Porównanie wyników z oczekiwanymi wartościami.</li>
+</ul>
 
-  1)Test poprawności wskaźników kompozytowych:
-Cel: Sprawdzenie, czy wskaźniki kompozytowe dla województw i powiatów są prawidłowo obliczane.
-Kroki:
-Wprowadzenie danych testowych z różnymi wartościami przestępstw.
-Obliczenie wskaźników według zaimplementowanych wag.
-Porównanie wyników z oczekiwanymi wartościami.
-  
-  2)Test interfejsu użytkownika:
-Cel: Weryfikacja, czy dashboard Streamlit poprawnie wyświetla dane dla województw i powiatów.
-Kroki:
-Uruchomienie aplikacji i załadowanie danych testowych.
-Sprawdzenie poprawności kolorów i wartości na mapach.
-Test funkcjonalności przejścia między województwami a powiatami.
+####  2)Test interfejsu użytkownika:
+##### Cel:  Weryfikacja, czy dashboard Streamlit poprawnie wyświetla dane dla województw i powiatów.
+###### Kroki:
+<ul>
+<li>Uruchomienie aplikacji i załadowanie danych testowych.</li>
+<li>Sprawdzenie poprawności kolorów i wartości na mapach.</li>
+<li>Test funkcjonalności przejścia między województwami a powiatami.</li>
+</ul>
 
-  3)Test wydajności aplikacji:
-Cel: Sprawdzenie, czy aplikacja działa płynnie z dużą ilością danych.
-Kroki:
-Zaimportowanie dużego zestawu danych przestępstw.
-Monitorowanie czasu ładowania i wydajności interfejsu.
+####  3)Test wydajności aplikacji:
+##### Cel:  Sprawdzenie, czy aplikacja działa płynnie z dużą ilością danych.
+###### Kroki:
+<ul>
+<li>Zaimportowanie dużego zestawu danych przestępstw.</li>
+<li>Monitorowanie czasu ładowania i wydajności interfejsu.</li>
+</ul>
 
-b. Sprawozdanie z wykonania scenariuszy testów
-Test poprawności wskaźników kompozytowych:
+### b. Sprawozdanie z wykonania scenariuszy testów
+#### Test poprawności wskaźników kompozytowych:
 Wynik pozytywny. Wskaźniki kompozytowe dla wszystkich danych testowych zgadzają się z oczekiwanymi wartościami.
 
-Test interfejsu użytkownika:
+#### Test interfejsu użytkownika:
 Wynik pozytywny. Kolory i wartości na mapach są zgodne z obliczonymi wskaźnikami. Przejście między województwami a powiatami działa poprawnie.
 
-Test wydajności aplikacji:
+#### Test wydajności aplikacji:
 Wynik pozytywny. Aplikacja działa, lecz przy obciążeniu danymi o rozmiarze powyżej 100 tysięcy rekordów następuje spowolnienie działania.
 
