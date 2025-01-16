@@ -1,0 +1,4 @@
+Kod aplikacji można wykorzystać na dwa sposoby:
+1) Wykorzystanie pliku "Kod aplikacji", który pobiera dane z api i wyświetla interfejs użytkownika
+2) Wykorzystanie pliku "Code part 2", aby wyświetlić tylko interfejs użytkownika, wszystkie wykorzystywane pliki są załączone w repozytorium
+Sposób drugi jest szybszy, ponieważ nie pobieramy na nowo danych z api, co jest procesem czasochłonnym
